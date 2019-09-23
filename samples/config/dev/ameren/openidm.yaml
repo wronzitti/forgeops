@@ -1,0 +1,5 @@
+config:
+  # If immutable is true, IDM  will not persist any configuration changes made in the admin UI (or via admin REST calls)
+  # back out to the file system. If you are developing and want to IDM to write configuration changes back out
+  # so they can saved and committed to git, set this to false.
+  immutable: false
