@@ -3,8 +3,6 @@ apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "openam.fullname" . }}
-  labels:
-    app: {{ template "openam.name" . }}
 spec:
   replicas: {{default 1 .Values.openamReplicaCount }}
   template:
@@ -15,31 +13,19 @@ spec:
         vendor: forgerock
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
-      annotations:
-        sidecar.istio.io/inject: "{{ .Values.istio.enabled }}"
-{{- with .Values.extraAnnotations }}
-{{ toYaml . | trim | indent 8 }}
-{{- end }}
     spec:
-      {{- with .Values.serviceAccountName }}
-      serviceAccountName: {{ . }}
-      {{- end }}
-      {{- with .Values.securityContext }}
-      securityContext:
-{{ toYaml . | trim | indent 8 }}
-      {{- end }}
       terminationGracePeriodSeconds: 10
       {{- if eq .Values.podAntiAffinity "hard" }}
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: {{ .Values.topologyKey }}
-              labelSelector:
-                matchExpressions:
-                  - key: component
-                    operator: In
-                    values:
-                      - {{ .Values.component }}
+          preferredDuringSchedulingIgnoredDuringExecution:
+              - topologyKey: {{ .Values.topologyKey }}
+                labelSelector:
+                  matchExpressions:
+                    - key: component
+                      operator: In
+                      values:
+                        - {{ .Values.component }}
       {{- else if eq .Values.podAntiAffinity "soft" }}
       affinity:
         podAntiAffinity:
@@ -80,8 +66,6 @@ spec:
         env:
         - name: BASE_DN
           value: {{ .Values.rootSuffix }}
-        - name: CONFIGURATION_LDAP
-          value: {{ .Values.configLdapHost }}:{{ .Values.configLdapPort }}
         volumeMounts:
         - name: openam-root
           mountPath: /home/forgerock/openam
@@ -113,9 +97,12 @@ spec:
           mountPath: /git
         {{ end }}
         {{ if .Values.useConfigMapWebxml }}
-        - mountPath: /usr/local/tomcat/webapps/am/WEB-INF/web.xml
-          name: webxml
-          subPath: webxml
+        - mountPath: /usr/local/tomcat/webapps/ROOT/WEB-INF/server.xml
+          name: conf
+          subPath: server.xml
+        - mountPath: /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
+          name: conf
+          subPath: web.xml
         {{ end }}
         envFrom:
         - configMapRef:
@@ -134,14 +121,14 @@ spec:
         # For slow environments like Minikube you need to give OpenAM time to come up.
         readinessProbe:
           httpGet:
-            path: /am/isAlive.jsp
+            path: /isAlive.jsp
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: 5
           periodSeconds: 20
         livenessProbe:
           httpGet:
-            path: /am/isAlive.jsp
+            path: /isAlive.jsp
             port: 8080
           initialDelaySeconds: 30
           timeoutSeconds: {{ .Values.livenessTimeout }}
@@ -158,30 +145,31 @@ spec:
         - name: openam-root
           mountPath: /home/forgerock/openam
       {{- end }}
-{{- with .Values.extraContainers }}
-{{ tpl . $ | trim | indent 6 }}
-{{- end }}
       volumes:
       {{ if .Values.useConfigMapWebxml }}
-      - configMap:
-          defaultMode: 420
-          name: webxml
-        name: webxml
+      - name: conf
+        configMap:
+          name: files
+          items:
+          - key: server.xml
+            path: server.xml
+          - key: web.xml
+            path: web.xml          
       {{ end }}
       - name: openam-root
         emptyDir: {}
       - name: openam-keys
         secret:
-          secretName: {{ default "openam-keys" .Values.existingSecrets.openamKeys }}
+          secretName: openam-keys
       - name: openam-keystore-passwords
         secret:
-          secretName: {{ default "openam-keystore-passwords" .Values.existingSecrets.openamKeystorePasswords }}
+          secretName: openam-keystore-passwords
       - name: openam-boot
         configMap:
           name: boot-json
       - name: configstore-secret
         secret:
-          secretName: {{ default "configstore" .Values.configSecretName }}
+          secretName: configstore
           #defaultMode: 256
       {{ if eq .Values.config.strategy  "git" }}
       - name: git
