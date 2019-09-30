@@ -1,0 +1,23 @@
+image:
+  repository: gcr.io/forgerock-io/amster
+  #repository: gcr.io/engineering-devops/amster
+  tag: 6.5.1
+  pullPolicy: Always
+  
+config:
+  importPath: /git/config/6.5/cdm/m-cluster/am
+  exportPath: /tmp/amster
+
+
+# Use the config store as the cts
+ctsStores: "configstore-0.configstore:1389"
+#ctsStores: "ctsstore-0.ctsstore:1389"
+
+amadminPassword: Accenture123
+
+# For production set CPU limits to help Kube Schedule the pods.
+resources:
+ limits:
+   memory: 756Mi
+ requests:
+   memory: 756Mi

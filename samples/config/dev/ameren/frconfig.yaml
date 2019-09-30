@@ -1,0 +1,7 @@
+git:
+  repo: https://github.com/1194178735/forgeops-init.git
+  branch: master
+  
+# Cert manager defaults
+certmanager:
+  enabled: false  

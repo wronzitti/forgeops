@@ -1,0 +1,8 @@
+# To use a tomcat web.xml from a k8s config map instead of the one built into the container, set the following to true.
+useConfigMapWebxml: true
+
+image:
+  #repository: gcr.io/engineering-devops/openam
+  repository: gcr.io/forgerock-io/openam
+  tag: 6.5.1
+  pullPolicy: Always
