@@ -36,7 +36,16 @@ metadata:
   name: am-configmap
 data:
   CATALINA_OPTS: "{{ .Values.catalinaOpts }}"
-  {{ if .Values.amCustomizationScriptPath -}}
-  CUSTOMIZE_AM: "{{ .Values.amCustomizationScriptPath }}"
+  {{ if .Values.config.amCustomizationScriptPath -}}
+  CUSTOMIZE_AM: "{{ .Values.config.amCustomizationScriptPath }}"
   {{- end }}
 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: files
+data:
+  server.xml: {{ (.Files.Get "configs/server.xml") .| quote }}
+  web.xml: {{ (.Files.Get "configs/web.xml") .| quote }}
+  

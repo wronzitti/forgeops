@@ -18,7 +18,7 @@ spec:
       {{- if eq .Values.podAntiAffinity "hard" }}
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
+          preferredDuringSchedulingIgnoredDuringExecution:
               - topologyKey: {{ .Values.topologyKey }}
                 labelSelector:
                   matchExpressions:
@@ -97,9 +97,12 @@ spec:
           mountPath: /git
         {{ end }}
         {{ if .Values.useConfigMapWebxml }}
+        - mountPath: /usr/local/tomcat/webapps/ROOT/WEB-INF/server.xml
+          name: conf
+          subPath: server.xml
         - mountPath: /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml
-          name: webxml
-          subPath: webxml
+          name: conf
+          subPath: web.xml
         {{ end }}
         envFrom:
         - configMapRef:
@@ -144,10 +147,14 @@ spec:
       {{- end }}
       volumes:
       {{ if .Values.useConfigMapWebxml }}
-      - configMap:
-          defaultMode: 420
-          name: webxml
-        name: webxml
+      - name: conf
+        configMap:
+          name: files
+          items:
+          - key: server.xml
+            path: server.xml
+          - key: web.xml
+            path: web.xml          
       {{ end }}
       - name: openam-root
         emptyDir: {}
