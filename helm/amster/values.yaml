@@ -71,7 +71,7 @@ userStore:
   host: configstore-0.configstore
   port: 1389
   dirManager: "cn=Directory manager"
-  password: "password"
+  password: password
   storeType: "LDAPv3ForOpenDS"
 
 # determines if '--clean true' is used for the import-config.
