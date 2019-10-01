@@ -52,4 +52,6 @@ data:
   AMADMIN_PASSWORD_HASHED: "{{ .Values.amadminPasswordHashed }}"
   DOMAIN: {{ .Values.domain }}
   COOKIE_DOMAIN: {{ trimPrefix "." .Values.domain }}
+  USER_STORE: {{ default "userstore-0.userstore:1389" .Values.userStore.host }}
+  USER_STORE_PASSWORD : {{ default "password" .Values.userStore.password }}
   

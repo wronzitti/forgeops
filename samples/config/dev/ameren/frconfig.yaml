@@ -4,4 +4,4 @@ git:
   
 # Cert manager defaults
 certmanager:
-  enabled: false  
+  enabled: true  
