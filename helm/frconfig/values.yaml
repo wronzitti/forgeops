@@ -24,13 +24,13 @@ git:
 certmanager:
   enabled: true
   # The default issuer is to use the CA certs issuer.
-  issuer: ca-issuer
+  #issuer: ca-issuer
   # And a local to namespace issuer
-  issuerKind: Issuer
+  #issuerKind: Issuer
   # For lets encrypt use this:
-  #acme: true
-  #issuer: letsencrypt-prod
-  #issuerKind: ClusterIssuer
+  acme: true
+  issuer: letsencrypt-prod-dns
+  issuerKind: ClusterIssuer
 
 istio:
   enabled: false
