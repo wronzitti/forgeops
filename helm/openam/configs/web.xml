@@ -22,7 +22,7 @@
    with the fields enclosed by brackets [] replaced by
    your own identifying information:
    "Portions Copyrighted [year] [name of copyright owner]"
-	test-walter
+
    Portions Copyrighted 2010-2019 ForgeRock AS.
 -->
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -194,7 +194,7 @@
                 A comma separated list of HTTP methods for which to accept CORS requests.
             </description>
             <param-name>methods</param-name>
-            <param-value>POST,PUT</param-value>
+            <param-value>POST,PUT,GET</param-value>
         </init-param>
         <init-param>
             <description>
@@ -202,7 +202,7 @@
                 A comma separated list of origins from which to accept CORS requests.
             </description>
             <param-name>origins</param-name>
-            <param-value>https://login.prod.amerentest.com,https://openidm.prod.amerentest.com</param-value>
+            <param-value>https://login.dev-walter.amerentest.com,https://openidm.dev-walter.amerentest.com,https://login.dev-walter.amerentest.com:443,https://openidm.dev-walter.amerentest.com:443</param-value>
         </init-param>
         <init-param>
             <description>
