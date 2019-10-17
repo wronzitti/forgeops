@@ -202,7 +202,7 @@
                 A comma separated list of origins from which to accept CORS requests.
             </description>
             <param-name>origins</param-name>
-            <param-value>https://login.dev-walter.amerentest.com,https://openidm.dev-walter.amerentest.com,https://login.dev-walter.amerentest.com:443,https://openidm.dev-walter.amerentest.com:443</param-value>
+            <param-value>https://login.dev-walter.amerentest.com,https://openidm.dev-walter.amerentest.com,https://login.dev-walter.amerentest.com:443,https://openidm.dev-walter.amerentest.com:443,http://openam:80,http://openidm:80</param-value>
         </init-param>
         <init-param>
             <description>
