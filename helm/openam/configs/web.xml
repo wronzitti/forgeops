@@ -331,7 +331,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>CORSFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/json/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>FQDNValidationFilter</filter-name>
