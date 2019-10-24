@@ -30,7 +30,7 @@ data:
       openidm.anonymous.password=anonymous
 
       # Client password for IDM/AM integration
-      openidm.idpconfig.clientsecret={{ .Values.openidm.idpconfig.clientsecret }}
+      #openidm.idpconfig.clientsecret={{ .Values.openidm.idpconfig.clientsecret }}
 
       # These are for the (ldap) provisioner i.e. used for synchronization
       userstore.host={{.Values.userstore.host}}

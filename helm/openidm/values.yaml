@@ -64,7 +64,7 @@ openidm:
      databaseName: openidm
   # Optional client secret for AM/IDM integration:
   idpconfig:
-    clientsecret: password
+    clientsecret: openidm
   prometheus:
     username: prometheus
     password: prometheus

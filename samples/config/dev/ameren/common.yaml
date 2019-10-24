@@ -2,9 +2,9 @@ domain: .amerentest.com
 
 #fqdn: login.mini.amerentest.com
 
-image:
-  tag: 6.5.1
-  pullPolicy: IfNotPresent
+# image:
+#   tag: 6.5.1
+#   pullPolicy: IfNotPresent
 
 #tlsStrategy: http
   
