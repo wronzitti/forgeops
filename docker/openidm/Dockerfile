@@ -1,13 +1,23 @@
 #
 # Copyright (c) 2016-2017 ForgeRock AS.
-FROM forgerock/downloader
+FROM forgerock/downloader:6.5.2.2
 
 ARG VERSION="6.5.1"
 RUN download -v $VERSION openidm 
 
 RUN mkdir -p /var/tmp/openidm && unzip -q /openidm.zip -d /var/tmp && rm -fr /var/tmp/openidm/samples
 
+#Remove files - vulnerabilities
+RUN rm -f /var/tmp/openidm/connectors/databasetable-connector-1.4.1.0.jar
+#RUN rm -f /var/tmp/openidm/connectors/scim-connector-1.4.3.0.jar
+RUN rm -f /var/tmp/openidm/bundle/jackson-annotations-2.9.8.jar
+
+# RUN cd /var/tmp/openidm/connectors && find . -type f -not \(-name 'csvfile-connector-1.5.4.0.jar' -or -name 'ldap-connector-1.4.8.0.jar' \) -delete
+# RUN cd /var/tmp/openidm/bundle && find . -type f -not \(-name 'csvfile-connector-1.5.4.0.jar' -or -name 'ldap-connector-1.4.8.0.jar' \) -delete
+
 FROM gcr.io/forgerock-io/java:6.5.1
+#FROM openjdk:14-jdk-alpine
+#FROM forgerock/java:6.5.1
 
 COPY --from=0 /var/tmp/openidm /opt/openidm
 
@@ -32,7 +42,11 @@ RUN apk update && \
     apk add zip ttf-dejavu tini && \
     apk add --no-cache nss
 
-RUN chown -R forgerock:forgerock /opt/openidm  && rm -fr /opt/openidm/samples
+# Create a group and user
+#RUN addgroup -S forgerock && adduser -S forgerock -G forgerock
+
+RUN chown -R forgerock:forgerock /opt/openidm
+RUN rm -fr /opt/openidm/samples
 
 COPY *.sh /opt/openidm/
 COPY logging.properties /opt/openidm/logging.properties

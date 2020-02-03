@@ -3,13 +3,14 @@
 #
 # Copyright (c) 2016-2017 ForgeRock AS. Use of this source code is subject to the
 # Common Development and Distribution License (CDDL) that can be found in the LICENSE file
-FROM forgerock/downloader:latest
+FROM forgerock/downloader:6.5.2.2
 
 ARG VERSION="6.5.1"
 RUN download -v $VERSION amster
 RUN mkdir -p /var/tmp/amster && unzip -q /amster.zip -d /var/tmp/amster
 
-FROM forgerock/java:6.0.0
+#FROM forgerock/java:6.5.1
+FROM gcr.io/forgerock-io/java:6.5.1
 
 COPY --from=0 /var/tmp/amster /opt/amster
 

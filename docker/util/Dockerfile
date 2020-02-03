@@ -4,7 +4,7 @@
 # Utility shell scripts used as init containers to perform creation of bootstrap files
 # wait for for pods to be available, etc.
 # We expect this to be deprecated for 6.5 
-FROM alpine:3.7
+FROM alpine:latest
 
 #  -Dcom.iplanet.services.debug.level=error
 
@@ -12,7 +12,7 @@ ENV FORGEROCK_HOME /home/forgerock
 ENV OPENAM_HOME /home/forgerock/openam
 
 
-ENV KUBE_LATEST_VERSION="v1.10.1"
+ENV KUBE_LATEST_VERSION="v1.17.0"
 
 RUN apk add --update ca-certificates \
  && apk add --update -t deps curl\

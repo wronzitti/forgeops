@@ -1,12 +1,13 @@
 
-FROM forgerock/downloader 
+FROM forgerock/downloader:6.5.2.2 
 
 ARG VERSION="6.5.1-RC3"
 RUN download -v $VERSION opendj
 
 # JDK 11 tracking - https://bugster.forgerock.org/jira/browse/OPENDJ-5207
 #FROM openjdk:11-jdk 
-FROM openjdk:8-jdk 
+#FROM openjdk:8-jdk
+FROM gcr.io/forgerock-io/java:6.5.1 
 COPY --from=0 /opendj.zip /var/tmp/opendj.zip
 
 WORKDIR /var/tmp/bootstrap
@@ -20,16 +21,22 @@ RUN ./setup.sh
 
 #####################  Runtime container ################
 #FROM openjdk:11-jdk
-FROM openjdk:8-jdk
+#FROM openjdk:8-jdk
+FROM gcr.io/forgerock-io/java:6.5.1
 
-ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin
-RUN chmod +x /usr/bin/tini
+# ENV TINI_VERSION v0.18.0
+# ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /usr/bin
+# RUN chmod +x /usr/bin/tini
 
 COPY --from=1 /var/tmp/bootstrap/run/dsrs1 /opt/opendj/
 
-RUN useradd -d /opt/opendj -G root -m -u 11111 forgerock \
-    && apt-get update && apt-get install -y --no-install-recommends dumb-init vim fio
+#RUN #&& addgroup -g 11111 forgerock \
+    #&& adduser -s /bin/bash -h /opt/opendj -u 11111 -D -G root forgerock \
+RUN apk add --no-cache su-exec unzip curl bash bind-tools ttf-dejavu iputils sysstat tini \
+    && apk upgrade \
+    && apk del --no-cache bind 
+    #useradd -d /opt/opendj -G root -m -u 11111 forgerock \
+    #&& apt-get update && apt-get install -y --no-install-recommends dumb-init vim fio
    
 WORKDIR /opt/opendj 
 

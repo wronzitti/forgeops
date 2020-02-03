@@ -2,13 +2,14 @@
 #
 # Copyright (c) 2016-2018 ForgeRock AS.
 #
-FROM forgerock/downloader 
+FROM forgerock/downloader:6.5.2.2 
 
 ARG VERSION="6.5.1"
 RUN download -v $VERSION openam 
 RUN mkdir -p /var/tmp/openam && unzip -q /openam.war -d /var/tmp/openam
 
-FROM tomcat:8.5-alpine
+FROM tomcat:alpine-test
+#FROM tomcat:8.5-alpine
 
 RUN rm -fr "$CATALINA_HOME"/webapps/*
 

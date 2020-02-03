@@ -1,9 +1,9 @@
 # Git image for performing configuration checkout / push.
-FROM alpine:3.7
+FROM alpine:latest
 
 ENV FORGEROCK_HOME /opt/forgerock
 
-RUN apk add --no-cache git bash vim openssh-client \
+RUN apk add --update --no-cache git bash vim openssh-client \
     && mkdir -p /opt/forgerock \
     && addgroup -g 11111 forgerock \
     && adduser -s /bin/bash -h "$FORGEROCK_HOME" -u 11111 -D -G forgerock forgerock \
